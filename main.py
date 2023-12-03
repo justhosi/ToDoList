@@ -8,41 +8,81 @@ windows = Tk()
 windows.title("To Do List")
 
 
+#Create a warning for clear all the tasks
+def show_warning():
+    messagebox.showwarning(title="Warning", message="Are you sure you want\nto clear all the tasks?")
+#Create an info message box
+def show_info():
+    messagebox.showinfo(title="About us", message="Programmer: Hosi Mohi\nEmail: mohamadzadeh@outlook.com")
+
+#function to add the user task entry to the list
 def add_to_do():
+    user_input = entry1.get()
+    list_box.insert(END, user_input)
+
+def del_task():
     pass
 
+def del_all():
+    show_warning()
+    list_box.delete(0, END)
+    lb_tasks.config(text="The list is cleared")
+
+def show_number():
+    pass
+
+def edit_task():
+    pass
+
+def show_about():
+    show_info()
+
+def exit_app():
+    pass
 
 
 #Create input point for to do list and position it
 entry1 = Entry(windows, width=35, font=("ubuntu", 13))
-entry1.grid(row=0, column=0, padx=25, pady=5)
+entry1.pack()
+entry1.place(x=10, y=10)
 #Create a button for adding a task and position it
 btn_add = Button(windows, text="Add to list", command=add_to_do)
-btn_add.grid(row=0, column=2, pady=5)
+btn_add.pack()
+btn_add.place(x=390, y=10)
 #Create a button for deleting a task and position it
-btn_del = Button(windows, text="Delete", command="")
-btn_del.grid(row=1, column=2, padx=5, pady=5)
+btn_del = Button(windows, text="Delete", command=del_task)
+btn_del.pack()
+btn_del.place(x=390, y=50)
 #Create a button for deleting all the tasks and position it
-btn_del_all = Button(windows, text="Clear list", command="")
-btn_del_all.grid(row=2, column=2, padx=5, pady=5)
+btn_del_all = Button(windows, text="Clear list", command=del_all)
+btn_del_all.pack()
+btn_del_all.place(x=390, y=90)
 #Create a button to show the number of current tasks
-btn_show_number = Button(windows, text="Active tasks", command="")
-btn_show_number.grid(row=3, column=2, padx=5, pady=5)
+btn_show_number = Button(windows, text="Active tasks", command=show_number)
+btn_show_number.pack()
+btn_show_number.place(x=390, y=130)
 #Create a label to show the active tasks on it
-lb_tasks = Label(windows, text="", font=("ubuntu, 15"))
-lb_tasks.grid(row=1, column=0, padx=5, pady=5) 
+lb_tasks = Label(windows, text="", font=("ubuntu, 15"), background="white", foreground="red")
+lb_tasks.pack()
+lb_tasks.place(x=150,y=45 )
 #Create a edit button
-btn_edit =Button(windows, text="Edit task", command="")
-btn_edit.grid(row=4, column=2, padx=5, pady=5)
+btn_edit =Button(windows, text="Edit task", command=edit_task)
+btn_edit.pack()
+btn_edit.place(x=390, y=170)
 #Create an "About" button
-btn_about =  Button(windows, text="About", command="")
-btn_about.grid(row=5, column=2, padx=5, pady=5)
+btn_about =  Button(windows, text="About", command=show_about)
+btn_about.pack()
+btn_about.place(x=390, y=210)
+
 #Create an exit button
-btn_exit = Button(windows, text="Exit", command="")
-btn_exit.grid(row=6, column=2, padx=5, pady=5)
+btn_exit = Button(windows, text="Exit", command=exit_app)
+btn_exit.pack()
+btn_exit.place(x=390, y=250)
 
 #Creat a list box
-list_box = Listbox(windows, font=("ubuntu, 13"), height=30, width=30)
+list_box = Listbox(windows, font=("ubuntu, 13"),bg="dark grey", fg="yellow", height=30, width=32)
+list_box.pack()
+list_box.place(x=10, y=80)
 
 
 
@@ -55,6 +95,6 @@ list_box = Listbox(windows, font=("ubuntu, 13"), height=30, width=30)
 
 
 #Set windows size
-windows.geometry("500x650")
+windows.geometry("500x750")
 #start the main loop
 windows.mainloop()

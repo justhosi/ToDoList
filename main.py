@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter.ttk import *
 from tkinter import messagebox
+from tkinter.simpledialog import askstring
 
 #Creat windows
 windows = Tk()
@@ -21,7 +22,12 @@ def add_to_do():
     list_box.insert(END, user_input)
 
 def del_task():
-    pass
+    selected_task_index = list_box.curselection()
+    if not selected_task_index:
+        messagebox.showwarning("No Task Selected", "Please select a task to edit.")
+        return
+
+    list_box.delete(ACTIVE)
 
 def del_all():
     show_warning()
@@ -29,17 +35,32 @@ def del_all():
     lb_tasks.config(text="The list is cleared")
 
 def show_number():
-    pass
+    n = list_box.index("end")
+    lb_tasks.config(text="There is {} task(s) in the list".format(str(n)))
 
 def edit_task():
-    pass
+    selected_task_index = list_box.curselection()
+
+    if not selected_task_index:
+        messagebox.showwarning("No Task Selected", "Please select a task to edit")
+        return
+
+    selected_task_index = selected_task_index[0]
+    current_text = list_box.get(selected_task_index)
+
+    new_text = askstring("Edit Task", "Edit the task:", initialvalue=current_text)
+
+    if new_text is not None:
+        list_box.delete(selected_task_index)
+        list_box.insert(selected_task_index, new_text)
+
+    
 
 def show_about():
     show_info()
 
 def exit_app():
-    pass
-
+    windows.destroy()
 
 #Create input point for to do list and position it
 entry1 = Entry(windows, width=35, font=("ubuntu", 13))
@@ -62,9 +83,9 @@ btn_show_number = Button(windows, text="Active tasks", command=show_number)
 btn_show_number.pack()
 btn_show_number.place(x=390, y=130)
 #Create a label to show the active tasks on it
-lb_tasks = Label(windows, text="", font=("ubuntu, 15"), background="white", foreground="red")
+lb_tasks = Label(windows, text="", font=("ubuntu", 15), background="white", foreground="red")
 lb_tasks.pack()
-lb_tasks.place(x=150,y=45 )
+lb_tasks.place(x=10,y=45 )
 #Create a edit button
 btn_edit =Button(windows, text="Edit task", command=edit_task)
 btn_edit.pack()

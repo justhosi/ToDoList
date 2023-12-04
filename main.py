@@ -2,16 +2,18 @@ from tkinter import *
 from tkinter.ttk import *
 from tkinter import messagebox
 from tkinter.simpledialog import askstring
+import pickle
+
 
 #Creat windows
 windows = Tk()
 #Set the title
 windows.title("To Do List")
 
-
 #Create a warning for clear all the tasks
 def show_warning():
-    messagebox.showwarning(title="Warning", message="Are you sure you want\nto clear all the tasks?")
+    resault = messagebox.askyesno(title="Warning", message="Are you sure you want\nto clear all the tasks?")
+    return resault
 #Create an info message box
 def show_info():
     messagebox.showinfo(title="About us", message="Programmer: Hosi Mohi\nEmail: mohamadzadeh@outlook.com")
@@ -20,7 +22,7 @@ def show_info():
 def add_to_do():
     user_input = entry1.get()
     list_box.insert(END, user_input)
-
+#Function to delete selected task
 def del_task():
     selected_task_index = list_box.curselection()
     if not selected_task_index:
@@ -28,16 +30,18 @@ def del_task():
         return
 
     list_box.delete(ACTIVE)
-
+#Function to clear task list
 def del_all():
-    show_warning()
-    list_box.delete(0, END)
-    lb_tasks.config(text="The list is cleared")
-
+    if show_warning() is True:
+        list_box.delete(0, END)
+        lb_tasks.config(text="The list is cleared")
+    else:
+        return
+#Function to show the number of tasks in hand
 def show_number():
     n = list_box.index("end")
     lb_tasks.config(text="There is {} task(s) in the list".format(str(n)))
-
+#Function for edit selected task
 def edit_task():
     selected_task_index = list_box.curselection()
 
@@ -55,11 +59,18 @@ def edit_task():
         list_box.insert(selected_task_index, new_text)
 
     
-
+#Function to show information about programmer
 def show_about():
     show_info()
+#Function to save all tasks
+def save_tasks():
+    content = list_box.get(0, END)
+    output_file = open("./data/cache.dat", "wb")
+    pickle.dump(content, output_file)
 
+#To save and exit the app
 def exit_app():
+    save_tasks()
     windows.destroy()
 
 #Create input point for to do list and position it
@@ -94,28 +105,30 @@ btn_edit.place(x=390, y=170)
 btn_about =  Button(windows, text="About", command=show_about)
 btn_about.pack()
 btn_about.place(x=390, y=210)
-
+#Create a save button
+btn_save= Button(windows, text="save", command= save_tasks)
+btn_save.pack()
+btn_save.place(x=390, y=250)
 #Create an exit button
 btn_exit = Button(windows, text="Exit", command=exit_app)
 btn_exit.pack()
-btn_exit.place(x=390, y=250)
+btn_exit.place(x=390, y=290)
 
 #Creat a list box
 list_box = Listbox(windows, font=("ubuntu, 13"),bg="dark grey", fg="yellow", height=30, width=32)
 list_box.pack()
 list_box.place(x=10, y=80)
-
-
-
-
-
-
-
-
+#Load the data from cache to the list
+input_file = open("./data/cache.dat", "rb")
+conntent = pickle.load(input_file)
+for i in conntent:
+    list_box.insert(END, i)
 
 
 
 #Set windows size
-windows.geometry("500x750")
+windows.geometry("500x800")
+windows.maxsize(500, 800)
+windows.minsize(500, 800)
 #start the main loop
 windows.mainloop()
